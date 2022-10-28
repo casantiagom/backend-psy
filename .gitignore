@@ -1,0 +1,13 @@
+coverage
+build
+node_modules
+stats.json
+
+# Cruft
+.DS_Store
+npm-debug.log
+.idea
+db.sqlite3
+__pycache__/
+uploads/
+.env
