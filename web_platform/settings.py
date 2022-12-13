@@ -155,7 +155,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-ALLOWED_HOSTS = ['psy-quiz.herokuapp.com', '127.0.0.1:8000', 'localhost']
+ALLOWED_HOSTS = ['psy-quiz.herokuapp.com', '127.0.0.1:8000', 'localhost', '.vercel.app']
 
 
 
