@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os
 from pathlib import Path
-import django_heroku
 import dotenv
 import dj_database_url
 
@@ -29,12 +28,10 @@ if os.path.isfile(dotenv_file):
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sf!23yc%(@j%!uzmbv+a7%#)+f4^+sx!rztyy_b+opx#7-6=82'
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = [ '**.herokuapp.com']
+DEBUG = False
 
 
 # Application definition
@@ -67,9 +64,17 @@ MIDDLEWARE = [
     
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'web_platform.urls'
+SECURE_SSL_REDIRECT = False
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS=2592000
+SECURE_HSTS_INCLUDE_SUBDOMAINS=True
+SECURE_HSTS_PRELOAD=True
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
+
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS').split(' ')
+#CSRF_TRUSTED_ORIGINS = ['https://127.0.0.1', 'https://localhost']
 
 TEMPLATES = [
     {
@@ -93,18 +98,11 @@ WSGI_APPLICATION = 'web_platform.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'casantiagom',
-        'USER': 'postgres',
-        'PASSWORD': os.getenv("SUPA_PASSWORD"),
-        'HOST': os.getenv("SUPA_HOST"),
-        'PORT': '5432',
-    }
+DATABASES = {}
 
-}
-DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+
+DATABASES['default'] = dj_database_url.parse(os.environ.get('DATABASE_URL'), conn_max_age=600)
+
 
 
 # Password validation
@@ -143,9 +141,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'build/static')
-]
+STATICFILES_DIRS = []
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
@@ -155,11 +151,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+
+
 ALLOWED_HOSTS = ['*']
-
-
-
-import django_heroku
-django_heroku.settings(locals())
-options = DATABASES['default'].get('OPTIONS', {})
-options.pop('sslmode', None)

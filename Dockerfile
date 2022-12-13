@@ -1,26 +1,28 @@
-ARG PYTHON_VERSION=3.10-slim-buster
+# pull official base image
+FROM python:3.10.9
 
-FROM python:${PYTHON_VERSION}
+# set work directory
+WORKDIR /usr/src/app
 
+# set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN mkdir -p /code
+# create the app directory - and switch to it
+RUN mkdir -p /app
+WORKDIR /app
 
-WORKDIR /code
-
+# install dependencies
 COPY requirements.txt /tmp/requirements.txt
-
 RUN set -ex && \
     pip install --upgrade pip && \
     pip install -r /tmp/requirements.txt && \
     rm -rf /root/.cache/
 
-COPY . /code/
+# copy project
+COPY . /app/
 
-RUN python manage.py collectstatic --noinput
-
+# expose port 8000
 EXPOSE 8000
 
-# replace demo.wsgi with <project_name>.wsgi
-CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "demo.wsgi"]
+CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "web_platform.wsgi:application"]

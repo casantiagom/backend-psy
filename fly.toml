@@ -1,4 +1,4 @@
-# fly.toml file generated for backend-psy on 2022-12-13T10:19:09-08:00
+# fly.toml file generated for backend-psy on 2022-12-13T15:52:20-08:00
 
 app = "backend-psy"
 kill_signal = "SIGINT"
