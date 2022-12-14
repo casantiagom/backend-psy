@@ -28,7 +28,7 @@ if os.path.isfile(dotenv_file):
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = str(os.getenv('SECRET_KEY'))
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -66,13 +66,14 @@ MIDDLEWARE = [
 
 
 ROOT_URLCONF = 'web_platform.urls'
-SECURE_SSL_REDIRECT = False
-CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT=False
+#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_COOKIE_SECURE=True
 SECURE_HSTS_SECONDS=2592000
 SECURE_HSTS_INCLUDE_SUBDOMAINS=True
 SECURE_HSTS_PRELOAD=True
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
-
+#ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS').split(' ')
 #CSRF_TRUSTED_ORIGINS = ['https://127.0.0.1', 'https://localhost']
 
