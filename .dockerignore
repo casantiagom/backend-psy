@@ -20,3 +20,4 @@ docs
 env
 logs
 Dockerfile
+db.sqlite3
