@@ -66,7 +66,7 @@ MIDDLEWARE = [
 
 
 ROOT_URLCONF = 'web_platform.urls'
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 #SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CSRF_COOKIE_SECURE = True
 SECURE_HSTS_SECONDS=2592000
@@ -111,7 +111,7 @@ MAX_CONN_AGE=600
 if "DATABASE_URL" in os.environ:
     # Configure Django for DATABASE_URL environment variable.
     DATABASES["default"] = dj_database_url.config(
-        conn_max_age=MAX_CONN_AGE, ssl_require=True)
+        conn_max_age=MAX_CONN_AGE)
 
     # Enable test database if found in CI environment.
     if "CI" in os.environ:
