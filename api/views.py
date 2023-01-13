@@ -3,10 +3,10 @@ from django.shortcuts import render
 from django.http import response, HttpResponse, HttpResponseNotFound
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import AnswerSerializer, PersonSerializer, QuestionLikertSerializer, QuizzesSerializer
-from .models import Person, Quizzes, QuestionLikert, Answer
+from .serializers import AnswerSerializer, PersonSerializer, QuestionLikertSerializer, QuizzesSerializer, RankingNameSerializer, ChoiceSerializer
+from .models import Person, Quizzes, QuestionLikert, Answer, RankingName, Choice
 from api import serializers
-from .utils import createAnswer, getAnswerList, updateAnswerPut
+from .utils import createAnswer, getAnswerList, updateAnswerPut, createRankingAnswer, updateRankingAnswerPut, getRankingAnswerList
 from django.views import View
 import os
 
@@ -56,6 +56,12 @@ def getRoutes(request):
             'method': 'PUT',
             'body': {'answerupdate': ""},
             'description': 'get array of answers'
+    },
+    {
+       'Endpoint': '/rankinganswer/id/update',
+            'method': 'PUT',
+            'body': {'rankinganswerupdate': ""},
+            'description': 'update ranking answers'
     }
 
   ]
@@ -67,6 +73,53 @@ def getPersons(request):
   persons = Person.objects.all()
   serializer = PersonSerializer(persons, many=True)
   return Response(serializer.data)
+
+#ANSWER
+@api_view(['GET','POST'])
+def getAnswer(request):
+   if request.method == 'GET':
+        return getAnswerList(request)
+
+   if request.method == 'POST':
+        return createAnswer(request)
+
+@api_view(['PUT'])
+def updateAnswer(request,pk):
+  return updateAnswerPut(request, pk)
+
+#QUIZZES
+@api_view(['GET', 'POST'])
+def getQuizzes(request):
+  quizzes = Quizzes.objects.all()
+  serializer = QuizzesSerializer(quizzes, many=True)
+  return Response(serializer.data)
+
+@api_view(['GET', 'POST'])
+def getChoices(request):
+  choice = Choice.objects.all()
+  serializer = ChoiceSerializer(choice, many=True)
+  return Response(serializer.data)
+
+
+#RANKING
+@api_view(['GET', 'POST'])
+def getRankingNames(request):
+  rankingName = RankingName.objects.all()
+  serializer = RankingNameSerializer(rankingName, many=True)
+  return Response(serializer.data)
+
+@api_view(['GET','POST'])
+def getRankingAnswer(request):
+   if request.method == 'GET':
+        return getRankingAnswerList(request)
+
+   if request.method == 'POST':
+        return createRankingAnswer(request)
+
+@api_view(['PUT'])
+def updateRankingAnswer(request,pk):
+  return updateRankingAnswerPut(request, pk)
+
 
 @api_view(['GET','POST'])
 def getAnswer(request):
@@ -80,11 +133,6 @@ def getAnswer(request):
 def updateAnswer(request,pk):
   return updateAnswerPut(request, pk)
 
-@api_view(['GET', 'POST'])
-def getQuizzes(request):
-  quizzes = Quizzes.objects.all()
-  serializer = QuizzesSerializer(quizzes, many=True)
-  return Response(serializer.data)
 
 @api_view(['GET'])
 def getQuestionLikert(request):

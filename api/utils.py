@@ -1,6 +1,6 @@
 from rest_framework.response import Response
-from .models import  Answer, Person, QuestionLikert, Quizzes
-from .serializers import AnswerSerializer, PersonSerializer, QuestionLikertSerializer, QuizzesSerializer
+from .models import  Answer, Person, QuestionLikert, Quizzes, Choice, RankingAnswer
+from .serializers import AnswerSerializer, PersonSerializer, QuestionLikertSerializer, QuizzesSerializer, ChoiceSerializer, RankingAnswerSerializer, RankingAnswerUpdateSerializer
 
 
 def getPersonList(request):
@@ -39,6 +39,31 @@ def updateAnswerPut(request, pk):
 
     return Response(serializer.data)
 
+
+#RANKING ANWSER
+
+def getRankingAnswerList(request):
+  rankingAnswer = RankingAnswer.objects.all()
+  serializer = RankingAnswerSerializer(rankingAnswer, many=True)
+  return Response(serializer.data)  
+
+def createRankingAnswer(request):
+    data = request.data
+    rankingAnswer = RankingAnswer.objects.create(choice=Choice.objects.get(title=data['choice']),userChoice=data['userChoice'], person=Person.objects.get(id=data['person']))
+    serializer = RankingAnswerSerializer(rankingAnswer, many=False)
+    return Response(serializer.data)
+
+def updateRankingAnswerPut(request, pk):
+    data = request.data
+    rankingAnswer = RankingAnswer.objects.get(id=pk)
+    serializer = RankingAnswerUpdateSerializer(rankingAnswer, partial=True, data=data)
+
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+
 #QUIZZES
 
 def getQuizzes(request):
@@ -51,3 +76,17 @@ def getQuestionLikert(request):
     serializer = QuestionLikertSerializer(questionLikert, many=True)
     return Response(serializer.data)
 
+#CHOICES
+
+def getChoices(request):
+    choice = Choice.objects.all().order_by('-choice')
+    serializer = ChoiceSerializer(choice, many=True)
+    return Response(serializer.data)
+
+def createChoice(request):
+    data = request.data
+    choice = Choice.objects.create(
+        body=data['body']
+    )
+    serializer = ChoiceSerializer(choice, many=True)
+    return Response(serializer.data)

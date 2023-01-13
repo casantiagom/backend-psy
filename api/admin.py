@@ -13,24 +13,28 @@ class QuestionInlineModel(admin.TabularInline):
     model = models.QuestionLikert
     
 
-@admin.register(models.Quizzes)
+class PersonInlineModel(admin.TabularInline):
+    model = models.Person.quizzes.through
+    extra = 1
 
+
+@admin.register(models.Quizzes)
 class QuizAdmin(admin.ModelAdmin):
     list_display = [
         'id', 
         'title',
-        'person'
         ]
     inlines = [
-        QuestionInlineModel, 
-        ] 
+        QuestionInlineModel,
+        PersonInlineModel
+        ]
+    exclude = ( 'quizzes',)
 
 class AnswerInlineModel(admin.TabularInline):
     model = models.Answer
     
 
 @admin.register(models.QuestionLikert)
-
 class QuestionAdmin(admin.ModelAdmin):
     fields = [
         'question',
@@ -46,10 +50,41 @@ class QuestionAdmin(admin.ModelAdmin):
         ] 
 
 @admin.register(models.Answer)
-
 class AnswerAdmin(admin.ModelAdmin):
     list_display = [
         'answer', 
         'question',
         'person'
         ]
+
+
+class ChoicesInlineModel(admin.TabularInline):
+    model = models.Choice
+
+
+@admin.register(models.Choice)
+class ChoiceAdmin(admin.ModelAdmin):
+    list_display = [
+        'title',
+        'id', 
+        ]
+    
+
+
+@admin.register(models.RankingName)
+class RankingNamesAdmin(admin.ModelAdmin):
+    fields = [
+        'choice',
+        'rankingName',
+        ]
+   
+    
+
+@admin.register(models.RankingAnswer)
+class RankingAnswerAdmin(admin.ModelAdmin):
+    list_display = [
+        'choice', 
+        'userChoice',
+        'person'
+        ]
+    
