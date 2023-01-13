@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os
 from pathlib import Path
+import django_heroku
 import dotenv
 import dj_database_url
 
@@ -147,3 +148,10 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
+
+ALLOWED_HOSTS = ['psy-quiz.herokuapp.com', '127.0.0.1:8000', 'localhost', 'frontend-psy.vercel.app']
+
+
+django_heroku.settings(locals())
+options = DATABASES['default'].get('OPTIONS', {})
+options.pop('sslmode', None)
