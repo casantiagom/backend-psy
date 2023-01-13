@@ -153,7 +153,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 
-ALLOWED_HOSTS = ['psy-quiz.herokuapp.com', '127.0.0.1:8000', 'localhost', 'frontend-psy.vercel.app']
+ALLOWED_HOSTS = ['psy-quiz.herokuapp.com', '127.0.0.1:8000', 'localhost:3000', 'frontend-psy.vercel.app']
 
 
 django_heroku.settings(locals())
