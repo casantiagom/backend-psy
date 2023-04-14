@@ -1,6 +1,9 @@
 
 # Mental Health Questionnaire Backend
 This repository contains the backend code for a mental health questionnaire site. The backend is built using Django(Python) and uses a SQL database to store the questionnaire, responses, user, e-mails.
+It is connected with the following frontend project: https://github.com/casantiagom/frontend-psy
+
+
 
 # Getting Started
 To get started with the backend, you'll need to follow these steps:
